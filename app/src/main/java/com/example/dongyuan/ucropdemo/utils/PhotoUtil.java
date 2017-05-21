@@ -25,29 +25,30 @@ public class PhotoUtil {
 
     //拍照
     public static Uri toCamera(Activity activity) {
-        String imagePath=FileUtil.toCreateImagePath();
+        String imagePath = FileUtil.toCreateImagePath();
         Uri uri = Uri.fromFile(new File(imagePath));
-        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        activity.startActivityForResult(intent,CAMERA_REQUEST_CODE);
+        activity.startActivityForResult(intent, CAMERA_REQUEST_CODE);
         return uri;
     }
 
     //相册
     public static void toAlbum(Activity activity) {
-            Intent intent = new Intent(Intent.ACTION_PICK, null);
-            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            activity.startActivityForResult(intent, ALBUM_REQUEST_CODE);
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        activity.startActivityForResult(Intent.createChooser(intent, "选择图片"), ALBUM_REQUEST_CODE);
     }
 
     //剪切
-    public static void toCrop(Uri originalUri , Activity activity){
-        String imagePath=FileUtil.toCreateImagePath();
+    public static void toCrop(Uri originalUri, Activity activity) {
+        String imagePath = FileUtil.toCreateImagePath();
         Uri destinationUri = Uri.fromFile(new File(imagePath));
         UCrop.of(originalUri, destinationUri)
-                .start(activity);}
+                .start(activity);
+    }
 
     //获得图片路径
     public String getImageAbsolutePath(final Context context, final Uri uri) {
