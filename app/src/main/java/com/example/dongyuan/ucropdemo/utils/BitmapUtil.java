@@ -54,12 +54,6 @@ public class BitmapUtil {
         Bitmap bm = decodeBitmap(filePath);//获取一定尺寸的图片
         File outputFile=new File(FileUtil.toCreateImagePath());
         try {
-            if (!outputFile.exists()) {
-                outputFile.getParentFile().mkdirs();
-                //outputFile.createNewFile();
-            }else{
-                outputFile.delete();
-            }
             FileOutputStream out = new FileOutputStream(outputFile);
             bm.compress(Bitmap.CompressFormat.JPEG, quality, out);
         }catch (Exception e){}
