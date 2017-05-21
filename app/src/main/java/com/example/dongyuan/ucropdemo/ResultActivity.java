@@ -3,17 +3,13 @@ package com.example.dongyuan.ucropdemo;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.dongyuan.ucropdemo.utils.BitmapUtil;
-
-import java.io.File;
 
 public class ResultActivity extends AppCompatActivity {
     private static String TAG=ResultActivity.class.getSimpleName();
