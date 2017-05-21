@@ -15,6 +15,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context=this;
+        //7.0 调用系统相机需要
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();

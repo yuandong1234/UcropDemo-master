@@ -1,16 +1,21 @@
 package com.example.dongyuan.ucropdemo;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.dongyuan.ucropdemo.utils.PhotoUtil;
 import com.example.dongyuan.ucropdemo.widget.BottomDialog;
+import com.yalantis.ucrop.UCrop;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    private static String TAG = MainActivity.class.getSimpleName();
     private BottomDialog dialog;
+    private Uri originalUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +43,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.ll_sex_man:
                 dialog.dismiss();
-                //Toast.makeText(this,"男",Toast.LENGTH_SHORT).show();
-                PhotoUtil.toCamera(this);
+                originalUri = PhotoUtil.toCamera(this);
                 break;
             case R.id.ll_sex_woman:
                 dialog.dismiss();
-                Toast.makeText(this, "女", Toast.LENGTH_SHORT).show();
+                PhotoUtil.toAlbum(this);
                 break;
             case R.id.cancel:
                 dialog.dismiss();
@@ -54,11 +58,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case PhotoUtil.REQUEST_CAMERA:
-                //在指定Uri的情况下，data返回为null
-                break;
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case PhotoUtil.CAMERA_REQUEST_CODE:
+                    //在指定Uri的情况下，data返回为null
+                    Log.e(TAG, "照相成功");
+                    PhotoUtil.toCrop(originalUri, this);
+                    break;
+                case PhotoUtil.ALBUM_REQUEST_CODE:
+                    if (data != null) {
+                        try {
+                            Uri uri = data.getData();
+                            Log.e(TAG, "从相册获取成功 :"+uri.getPath());
+                            PhotoUtil.toCrop(uri, this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case UCrop.REQUEST_CROP:
+                    if (data != null) {
+                        Uri resultUri = UCrop.getOutput(data);
+                        Log.e(TAG, "图片剪切成功 : " + resultUri.getPath());
+                        ResultActivity.startWithUri(this, resultUri);
+                    }
+                    break;
+                case UCrop.RESULT_ERROR:
+                    Throwable cropError = UCrop.getError(data);
+                    Log.e(TAG, "图片剪切失败 :" + cropError.toString());
+                    break;
+            }
         }
+
     }
 }

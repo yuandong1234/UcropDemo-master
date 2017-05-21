@@ -3,6 +3,8 @@ package com.example.dongyuan.ucropdemo.utils;
 import android.content.Context;
 import android.os.Environment;
 
+import com.example.dongyuan.ucropdemo.constant.AppConstant;
+
 import java.io.File;
 
 /**
@@ -32,5 +34,23 @@ public class FileUtil {
             dir.mkdir();
         }
         return (cachePath + File.separator + uniqueName + File.separator);
+    }
+
+    //随机创建图片路径
+    public static  String   toCreateImagePath(){
+        //判断文件夹是否存在
+        File file = new File(AppConstant.HEAD_PHOTO_PATH);
+        if (!file.exists()) {
+            try {
+                //不存在则要创建
+                //noinspection ResultOfMethodCallIgnored
+                file.mkdirs();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        //创建拍照生成的名字
+        String imageName = String.valueOf(System.currentTimeMillis()) +".jpg";
+        return  AppConstant.HEAD_PHOTO_PATH+imageName;
     }
 }
