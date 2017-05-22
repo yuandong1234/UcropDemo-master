@@ -8,8 +8,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.yalantis.ucrop.UCrop;
-
 import java.io.File;
 
 /**
@@ -46,12 +44,14 @@ public class PhotoUtil {
     public static void toCrop(Uri originalUri, Activity activity) {
         String imagePath = FileUtil.toCreateImagePath();
         Uri destinationUri = Uri.fromFile(new File(imagePath));
-        UCrop.of(originalUri, destinationUri)
-                .start(activity);
+        //使用Ucrop进行剪切
+        UcropUtil.startUcropWithUri(activity, originalUri, destinationUri);
+        //使用Android系统剪切功能
+       // UcropUtil.startCropWithUri(activity,originalUri);
     }
 
     //获得图片路径
-    public String getImageAbsolutePath(final Context context, final Uri uri) {
+    public static  String getImagePath(final Context context, final Uri uri) {
         if (null == uri) return null;
         final String scheme = uri.getScheme();
         String data = null;
